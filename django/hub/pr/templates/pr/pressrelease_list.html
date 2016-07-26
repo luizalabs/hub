@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block tab_name %}pr{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+        <h2>Press releases</h2>
+        </div>
+
+        <div class="col-md-2">
+            <a class="btn btn-default" href="{% url 'pr:pressrelease_add' %}"><i class="glyphicon glyphicon-plus"></i> Novo press release</a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-10">
+            {% for press_release in object_list %}
+                <h3>
+                    <a href="{% url 'pr:pressrelease_detail' press_release.id %}">{{ press_release.title }}</a>
+                </h3>
+
+                <p><span class="glyphicon glyphicon-time"></span> {{ press_release.created_at|date:"d/m/Y \à\s H:i" }}</p>
+
+
+                {% with press_release.teams.all as teams %}
+                    {% if teams %}
+                        <div>
+                            <p>
+                                {% for team in teams %}
+                                    <a href="{% url 'teams:team_detail' team.id %}" class="btn btn-default"><i class="glyphicon glyphicon-user"></i> {{ team.name }}</a>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}

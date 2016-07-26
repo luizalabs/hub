@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block tab_name %}projects{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>{% if object.pk %}Atualizar {% if object.parent %}aplicação{% else %}produto{% endif %}: {{ object }}{% else %}Adicionar produto/aplicação{% endif %}</h2>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{form.errors}}
+            </div>
+            {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        {% if object.pk %}Atualizar{% else %}Adicionar{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% load thumbnail bootstrap staticfiles %}
+
+<li>
+    <a href="{% url 'accounts:account_detail' member.email %}" data-toggle="tooltip" data-placement="top" title="{{ member }}">
+        <img height="35" width="35" src="{{ member.image|thumbnail_url:'person' }}" class="img-circle">
+    </a>
+</li>

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "css/jqcloud.min.css" %}"/>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/jqcloud.min.js" %}"></script>
+    <script src="{% static "js/view/tagcloud.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% if not user.has_filled_profile %}
+        <div class="row">
+            <div class="col-md-10">
+                <div class="alert alert-warning" role="alert">
+                    <b>Atenção!</b> Seu perfil ainda não está completo, <a href="{% url 'accounts:account_update' user.email %}">clique aqui para preencher seus dados</a>.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-10" align="center">
+            <div id="wordcloud" class="jqcloud" style="width: 80%; height: 150px;">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Mural</h2>
+            <hr>
+            {% for entry in news_entries %}
+                <h3>
+                    {{ entry.title }}
+                </h3>
+                <p><span class="glyphicon glyphicon-time"></span> {{ entry.created_at|date:"d/m/Y \à\s H:i" }}</p>
+
+                <p>
+                    {{ entry.text|linebreaksbr }}
+                </p>
+
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block tab_name %}people{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Pessoas</h2>
+        </div>
+    </div>
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Time</th>
+                <th>Filial</th>
+                <th>Telefone</th>
+            </tr>
+        </thead>
+
+        {% for account in object_list %}
+            <tr>
+                <td><img height="25" width="25" src="{{ account.image|thumbnail_url:'person' }}" class="img-circle"> <a href="{% url 'accounts:account_detail' account.email %}">{{ account.name }}</a></td>
+                <td>{{ account.team|default:"-" }}</td>
+                <td>{{ account.branch|default:"-" }}</td>
+                <td>{{ account.phone|default:"-" }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = django/hub
+
+[report]
+omit = */migrations*, */settings/*,*urls.py,*wsgi.py,manage.py,*/tests/*,__init__.py
+ignore_errors = True

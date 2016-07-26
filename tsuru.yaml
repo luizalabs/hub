@@ -1,0 +1,12 @@
+hooks:
+    build:
+        - make syncdb env=staging
+        - make migrate env=staging
+        - make collectstatic
+        - make conf-auth GOOGLE_ID_DEV='' GOOGLE_KEY_DEV=''
+
+healthcheck:
+    path: accounts/login/
+    method: GET
+    status: 200
+    allowed_failures: 1

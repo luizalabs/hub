@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <h2>Seja bem vindo</h2>
+        <p>
+            Este sistema é de uso interno da equipe Luizalabs. <a href="/accounts/google/login/?process=login">Acessar</a>
+        </p>
+    </div>
+
+    <div style="display:none">
+    <!--- sim isso é de propósito -->
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+    <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+    </form>
+    </div>
+{% endblock %}

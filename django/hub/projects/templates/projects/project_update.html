@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block tab_name %}projects{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Atualizar projeto: {{ object }}</h2>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load thumbnail bootstrap staticfiles %}
+
+{% block tab_name %}projects{% endblock %}
+
+{% block extra_js %}
+    <script>
+      var SEND_CHANGELOG_MAIL_URL = "{% url "projects:changelog_send_mail" 0 %}";
+      var SEND_CHANGELOG_SLACK_URL = "{% url "projects:changelog_send_slack" 0 %}";
+      var CHANGELOG_UPDATE_URL = "{% url "projects:changelog_update" 0 %}";
+
+      // init tooltip
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      });
+    </script>
+    <script src="{% static "js/view/project_detail.js" %}"></script>
+{% endblock %}
+
+{% if parent %}
+<li><a href="{% url 'projects:project_detail' parent.pk %}">{{ parent.name }}</a></li>
+{% endif %}
+<!-- <li><a href="{% url 'projects:project_detail' product.pk %}">{{ product.name }}</a></li> -->
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="clearfix content-heading media">
+                {% if project.image %}
+                    <img height="70" width="70" src="{{ project.image|thumbnail_url:'project' }}" class="img-circle pull-left">
+                {% endif %}
+
+                {% if project.parent %}
+                  <span class="project-breadcrumb">
+                    <a href="{% url 'projects:project_detail' project.parent.pk %}">{{ project.parent.name }}</a> <span class="hub-light-gray"><i class="glyphicon glyphicon-menu-right"></i></span>
+                  </span>
+                {% endif %}
+                <h2 class="project-name{% if project.parent %} application{% endif %}">
+                    {{ project.name }}
+                    {% if project.team == user.team or user.is_superuser %}
+                        <a class="btn btn-sm btn-default" href="{% url 'projects:project_update' project.id %}"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                    {% endif %}
+                </h2>
+
+                <p class="text-muted">{{ project.headline }}</p>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="row">
+        <div class="col-md-10">
+            <table class="table table-bordered">
+                {% if project.repo_id %}
+                    <tr>
+                        <td class="col-md-2">Repo</td>
+                        <td class="col-md-10">
+                            <a href="{{ project.github }}">{{ project.github }}</a>
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td class="col-md-2">Tags</td>
+                    <td class="col-md-10">
+                        {% for tag in project.tags.all %}
+                            <a href={% url 'core:tags_list' tag.id %} class="btn btn-default">{{ tag.name }}</a>
+                        {% empty %}
+                            <i>-</i>
+                        {% endfor %}
+                    </td>
+                </tr>
+
+                {% if project.team %}
+                <tr>
+                    <td class="col-md-2">Mantido pelo time</td>
+                    <td class="col-md-10"><a href="{% url 'teams:team_detail' project.team.id %}">{{ project.team }}</a></td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <td class="col-md-2">Passaram por este projeto</td>
+                    <td class="col-md-10">
+                        {% if project.members.all %}
+                        <ul class="list-unstyled list-inline">
+                        {% for member in project.members.all %}
+                            {% include 'projects/member_snippet.html'%}
+                        {% endfor %}
+                        {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+
+            </table>
+            <hr>
+
+            <div>
+                {{ project.render_description|safe }}
+            </div>
+
+            <hr>
+
+            {% if not project.parent_id %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>
+                        Aplicações <a class="btn btn-sm btn-default" href="{% url 'projects:child_project_create' project.id %}"><i class="glyphicon glyphicon-plus"></i> Adicionar</a>
+                    </h3>
+                    <br>
+                    {% for child in project.applications.all %}
+                        {% include 'projects/project_card_snippet.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 id="changelogs">Changelog {% if not project.parent %}do produto{% endif %} <a class="btn btn-sm btn-default" href="{% url 'projects:changelog_add' project.id %}"><i class="glyphicon glyphicon-plus"></i> Adicionar</a></h3>
+                    <br>
+                    {% for cl in project.changelogs %}
+                    <blockquote>
+                        <div rel="{{ cl.pk }}" class="changelog-box {% if cl.email_sent %} no-edit{% endif %}">
+                            <span class="hub-light-gray">{{ cl.created_at }}</span><br />
+                            <span class="hub-light-gray"><strong>{% if cl.project.parent %}Aplicação{% else %}Produto{% endif %} {{ cl.project.name }}</strong></span>
+                            <div class="changelog-container">
+                                {{ cl.render_description|safe }}
+                                {% if cl.last_slack_payload %}
+                                    {% with reactions=cl.reactions %}
+                                    <div class="thumbs text-muted" rel="{{ cl.pk }}">
+                                        <span class="thumbs-up-count">
+                                            {% if reactions.thumbs_up_count %}{{ reactions.thumbs_up_count }}{% else %}0{% endif %}
+                                        </span>
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <span class="thumbs-down-count">{% if reactions.thumbs_down_count %}{{ reactions.thumbs_down_count }}{% else %}0{% endif %}</span>
+                                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                                    </div>
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            <div class="actions hub-light-gray">
+                                {% if not cl.email_sent %}
+                                <span class="send-mail" rel="{{ cl.pk }}"><span class="glyphicon glyphicon-envelope"></span> Enviar e-mail</span> |
+                                {% endif %}
+                                <span class="send-slack" rel="{{ cl.pk }}"> <span class="glyphicon glyphicon-comment"></span> Enviar por slack</span>
+                            </div>
+                        </div>
+                    </blockquote>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="modal-mail" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Enviar changelog por e-mail</h4>
+                </div>
+                <form id="send_mail_changelog" role="form" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">{{ send_mail_form|bootstrap }}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-slack" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Enviar changelog para o Slack</h4>
+                </div>
+                <form id="send_slack_changelog" role="form" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">{{ send_slack_form|bootstrap }}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

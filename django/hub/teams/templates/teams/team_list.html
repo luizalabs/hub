@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block tab_name %}teams{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Times</h2>
+        </div>
+
+        {% if user.is_superuser %}
+            <div class="col-md-2">
+                <a class="btn btn-default" href="{% url 'teams:team_create' %}"><i class="glyphicon glyphicon-plus"></i> Novo time</a>
+            </div>
+        {% endif %}
+    </div>
+    <hr>
+
+
+    {% for team in object_list %}
+        {% ifchanged team.area %}
+            {% if not forloop.first %}
+                </div>
+                <hr>
+            {% endif %}
+            <h3>{{ team.area.name }}</h3>
+
+            <div class="row">
+        {% endifchanged %}
+
+        <div class="col-md-4">
+            <div class="team">
+                <div class="row">
+                    <div class="col-md-3 project-image">
+                        {% if team.image %}
+                            <img height="90" width="90" src="{{ team.image|thumbnail_url:'project' }}" class="img-circle img-responsive">
+                        {% else %}
+                            <img height="90" width="90" src="{{ STATIC_URL }}img/noimage90.png" class="img-circle img-responsive">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        <h3>
+                            <a href="{% url 'teams:team_detail' team.id %}">{{ team.name }}</a>
+                        </h3>
+                        <ul>
+                            {% for member in team.account_set.all %}
+                                <li>{{ member.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock %}

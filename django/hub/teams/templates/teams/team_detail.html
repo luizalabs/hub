@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block tab_name %}teams{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <div class="clearfix content-heading media">
+                {% if team.image %}
+                    <img height="70" width="70" src="{{ team.image|thumbnail_url:'project' }}" class="img-circle pull-left">
+                {% endif %}
+
+                <h2>
+                    {{ team.name }}
+
+                    {% if user in team.account_set.all or user.is_superuser %}
+                        <a class="btn btn-sm btn-default" href="{% url 'teams:team_update' team.id %}"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Equipe</h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-md-4">Nome</th>
+                        <th class="col-md-3">E-mail</th>
+                        <th class="col-md-3">Filial</th>
+                        <th class="col-md-2">Telefone</th>
+                    </tr>
+                </thead>
+
+                {% if team.leader %}
+                    <tr>
+                        <td><img height="25" width="25" src="{{ team.leader.image|thumbnail_url:'person' }}" class="img-circle"> <a href="{% url 'accounts:account_detail' team.leader.email %}">{{ team.leader.name }}</a></td>
+                        <td>{{ team.leader.email }}</td>
+                        <td>{{ team.leader.branch }}</td>
+                        <td>{{ team.leader.phone }}</td>
+                    </tr>
+                {% endif %}
+
+                {% for account in object.account_set.all %}
+                    {% if not account.id == team.leader.id %}
+                        <tr>
+                            <td><img height="25" width="25" src="{{ account.image|thumbnail_url:'person' }}" class="img-circle"> <a href="{% url 'accounts:account_detail' account.email %}">{{ account.name }}</a></td>
+                            <td>{{ account.email }}</td>
+                            <td>{{ account.branch }}</td>
+                            <td>{{ account.phone }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Projetos</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">Nome</th>
+                        <th class="col-md-8">Headline</th>
+                    </tr>
+                </thead>
+
+                {% for project in object.project_set.all %}
+                    <tr>
+                        <td><a href="{% url 'projects:project_detail' project.id %}">{{ project.name }}</a></td>
+                        <td>{{ project.headline }}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+
+
+    {% with object.pressrelease_set.all as releases %}
+        {% if releases %}
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>Press releases</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="col-md-2">Autor</th>
+                                <th class="col-md-10">Título</th>
+                            </tr>
+                        </thead>
+
+                        {% for press_release in releases %}
+                            <tr>
+                                <td>{{ press_release.author_name }}</td>
+                                <td><a href="{% url 'pr:pressrelease_detail' press_release.id  %}">{{ press_release.title }}</a></td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+{% endblock content %}

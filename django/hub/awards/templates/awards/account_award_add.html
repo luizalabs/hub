@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap staticfiles %}
+
+{% block tab_name %}people{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Adicionar Prêmio: {{ account.name }}</h2>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

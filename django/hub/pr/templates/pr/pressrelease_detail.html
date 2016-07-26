@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block tab_name %}pr{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <div class="clearfix content-heading media">
+                <h2>
+                    {{ object.title }}
+
+                    {% if request.user.is_superuser or request.user.id == object.added_by.id %}
+                    <small>
+                        <a href="{% url 'pr:pressrelease_update' object.pk %}">Editar</a>
+                    </small>
+                    {% endif %}
+                </h2>
+
+                <p class="text-muted">
+                    {{ object.author_name }} (<i>{{ object.author_email }}</i>)
+                </p>
+
+                <p>
+                    <span class="glyphicon glyphicon-time"></span>
+                        {{ object.created_at|date:"d/m/Y \à\s H:i" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            {{ object.text|linebreaksbr }}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="faq-box">
+        <h3>
+            FAQ
+            <a class="btn btn-sm btn-default" href="{% url 'pr:pressrelease_question_add' object.id %}"><i class="glyphicon glyphicon-pencil"></i> Adicionar pergunta</a>
+        </h3>
+
+        {% for question in object.question_set.all %}
+            <div class="row pr-faq-question">
+                <div class="col-md-10">
+                    <p class="question">
+                        {{ question.question }}
+                        <i class="text-muted pr-faq-question-author">(por <a href="{% url 'accounts:account_detail' question.author.email %}">{{ question.author.name }}</a>)</i>
+
+                    </p>
+                    <div class="answer">
+                        {% if question.answer %}
+                            {{ question.answer|linebreaks }}
+                        {% else %}
+                            <a class="btn btn-sm btn-default" href="{% url 'pr:pressrelease_question_update' pressrelease_id=object.id pk=question.id %}"><i class="glyphicon glyphicon-pencil"></i> Responder</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            Nenhuma pergunta por enquanto...
+        {% endfor %}
+        </div>
+
+
+{% endblock content %}

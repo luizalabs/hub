@@ -1,0 +1,34 @@
+<div class="col-sm-6 col-md-4 col-lg-3">
+	<div class="panel panel-default card">
+		<div class="panel-heading">
+			<h4><a href="{% url 'projects:project_detail' child.pk %}"><strong>{{child.name}}</strong></a>
+				<a href="{% url 'projects:project_update' child.id %}" class="btn btn-sm btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i></a>
+			</h4>
+		</div>
+		<div class="panel-body">
+			<p>{{child.description}}</p>
+
+			<ul class="list-unstyled list-inline">
+                {% if child.repo_id %}
+				    <li><a href="{{child.github}}"><i class="glyphicon glyphicon-link"></i> GitHub</a></li>
+                {% endif %}
+				<li><a href="{% url 'projects:project_detail' child.pk %}#changelogs"><i class="glyphicon glyphicon-hdd"></i> Changelog</a></li>
+			</ul>
+
+			<ul class="list-unstyled list-inline">
+
+				{% for tag in child.tags.all %}
+					<a href="{% url 'core:tags_list' tag.id %}" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-tag"></i> {{ tag.name }}</a>
+				{% endfor %}
+			</ul>
+			<hr>
+			<ul class="list-unstyled list-inline">
+                {% if child.members.all %}
+				{% for member in child.members.all %}
+                    {% include 'projects/member_snippet.html' %}
+				{% endfor %}
+                {% endif %}
+			</ul>
+		</div>
+	</div>
+</div>

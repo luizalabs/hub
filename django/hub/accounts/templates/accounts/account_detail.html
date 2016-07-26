@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="clearfix content-heading media">
+                {% if account.image %}
+                    <img height="70" width="70" src="{{ account.image|thumbnail_url:'person_large' }}" class="img-circle pull-left">
+                {% endif %}
+
+                <h2>
+                    {{ account.name }}
+                    {% if account == user or user.is_superuser %}
+                        <a class="btn btn-sm btn-default" href="{% url 'accounts:account_update' account.email %}"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+        <div class="row">
+            <div class="col-md-10">
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="col-md-2">E-mail</td>
+                        <td class="col-md-10">{{ account.email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2">Tags</td>
+                        <td class="col-md-10">
+                            {% for tag in account.tags.all %}
+                                <a href={% url 'core:tags_list' tag.id %} class="btn btn-default">{{ tag.name }}</a>
+                            {% empty %}
+                                <i>-</i>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% if account.team %}
+                    <tr>
+                        <td class="col-md-2">Time</td>
+                        <td class="col-md-10"><a href="{% url 'teams:team_detail' account.team.id %}">{{ account.team }}</a></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="col-md-2">Projetos</td>
+                        <td class="col-md-10">
+                            {% for project in account.project_set.all %}
+                                <a href="{% url 'projects:project_detail' project.id %}"><img height="35" width="35" src="{{ project.image|thumbnail_url:'person' }}" class="img-circle"> {{ project }}</a>&nbsp;
+                            {% empty %}
+                                -
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    {% if account.github_username %}
+                    <tr>
+                        <td>Github (pessoal)</td>
+                        <td>
+                            <a target="_blank" href="https://github.com/{{ account.github_username }}">
+                                {{ account.github_username }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% if account.twitter_username %}
+                    <tr>
+                        <td>Twitter</td>
+                        <td>
+                            <a target="_blank" href="https://twitter.com/{{ account.twitter_username }}">
+                                {{ account.twitter_username }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% if object.awards.count > 0 %}
+                    <tr>
+                        <td class="col-md-2">Prêmios</td>
+                        <td class="col-md-10">
+                            {% for award in object.awards.all %}
+                                <img height="50" width="50" src="{{ award.award.image.url }}" class="img-circle"> {{ award.title }}</a>&nbsp;
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+
+
+                {% if user.is_superuser or user_is_ancestor %}
+                    <h4><i class="glyphicon glyphicon-lock"></i> Visível apenas para gestores</h4>
+                    <table class="table table-bordered">
+
+                        {% if account.starting_date %}
+                            <tr>
+                                <td class="col-md-2">Tempo de contribuição</td>
+                                <td class="col-md-10">
+                                    {% with account.get_contrib_period as dt %}
+                                        {% if dt.years %}
+                                            {{ dt.years }} ano{{ dt.years|pluralize }}
+                                        {% endif %}
+
+                                        {% if dt.months %}
+                                            {{ dt.months }} mes{{ dt.months|pluralize:"es" }}
+                                        {% endif %}
+
+                                        {% if dt.days %}
+                                            {{ dt.days }} dia{{ dt.days|pluralize }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <td class="col-md-2">Data de admissão</td>
+                            <td class="col-md-10">
+                                {% if account.starting_date %}
+                                    {{ account.starting_date|date:"d/m/Y" }}
+                                {% else %}
+    <a href="{% url 'accounts:account_update' account.email %}" style="color:red"><i class="glyphicon glyphicon-exclamation-sign"></i> Informação pendente</a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2">Data de demissão</td>
+                            <td class="col-md-10">{{ account.leaving_date|date:"d/m/Y"|default:"-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-2">Premiar</td>
+                            <td><a href="{% url 'accounts:account_award_add' account.email %}" class="btn btn-primary btn-success"><span class="glyphicon glyphicon-tower"></span> Premiar</a></td>
+                        </tr>
+
+                    </table>
+                {% endif %}
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}

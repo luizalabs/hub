@@ -1,0 +1,75 @@
+{% load thumbnail %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title></title>
+        <style>
+            .img-circle {
+              border-radius: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+            <tr>
+                <td align="center" valign="top">
+                    <table border="0" cellpadding="20" cellspacing="0" width="650" id="emailContainer">
+                        <tr>
+                            <td colspan="2" align="center" valign="top" style="padding-bottom:0">
+                                <img src="http://hub.luizalabs.com/static/img/email_header.png">
+
+                            </td>
+
+
+                        </tr>
+
+                        <tr>
+                            {% if changelog.project.image %}
+                                <td style="width: 100px">
+                                    <img height="90" width="90" src="http://hub.luizalabs.com{{ changelog.project.image|thumbnail_url:'project' }}" class="img-circle img-responsive">
+                                </td>
+                            {% endif %}
+
+                            <td style="padding-top:5px">
+                                <p style="font-family:helvetica,sans-serif;color:#777;font-size:17px">
+                                    <b>{{ changelog.project.name }}</b>
+                                </p>
+
+                                <p style="font-family:helvetica,sans-serif;color:#777;font-size:14px">
+
+                                {% if changelog.project.team %}
+                                    <a style="color:777" href="http://hub.luizalabs.com{% url 'teams:team_detail' changelog.project.team.id %}">{{ changelog.project.team }}</a><br/>
+                                    Equipe: {% for m in changelog.project.team.account_set.all %}{% if forloop.last %}{% if not forloop.first %} e {% endif %}{% endif %}<a style="color:777" href="http://hub.luizalabs.com{% url 'accounts:account_detail' m.email %}">{{ m.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}<br/>
+                                {% endif %}
+
+                            </p>
+                        </tr>
+
+                        <tr>
+                            <td  colspan="2"  style="padding-top:5px">
+
+
+                                                        <p style="font-family:helvetica,sans-serif;color:#777">
+
+                                {{ changelog.render_description|safe }}
+
+                            </p>
+                        </tr>
+
+                    </table>
+
+                    <table border="0" cellpadding="20" cellspacing="0" width="650" id="emailContainer">
+                        <tr>
+                            <td align="center" valign="top">
+                                <a href="http://hub.luizalabs.com">
+                                <img src="http://hub.luizalabs.com/static/img/email_footer.png">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

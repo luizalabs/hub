@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block tab_name %}pr{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Adicionar press release</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

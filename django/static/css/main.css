@@ -1,0 +1,283 @@
+html {
+    overflow-y: scroll;
+}
+
+.wrapper-top-bev{
+    background-color: #EAEAEA;
+    height: 168px;
+}
+.bg-top-bev {
+    background: url("../img/teamc.jpg") repeat-x scroll center top transparent;
+    height: 75px;
+    border-bottom:1px solid #ddd;
+}
+.content-top-bev{
+    height: 87px;
+    background-color: #fff;
+    padding: 11px 30px;
+}
+.content-top-bev .logo-bev-top{
+    float: left;
+    background: url("../img/logo-hub.png") no-repeat;
+    height: 71px;
+    width: 152px;
+}
+.content-top-bev .btn-top-bev{
+    float: right;
+}
+.wrapper-middle-bev{
+    padding: 0 30px 30px 30px;
+    font-family: Helvetica;
+}
+.header-middle-bev{
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.left-header-bev,.left-meetings-bev{
+    font-family: 'Courier New',Courier, Arial;
+    font-style: italic;
+    width: 87px;
+    overflow: hidden;
+    float: left;
+    margin-right: 30px;
+}
+.left-header-bev strong, .left-meetings-bev strong{
+    color: #005D99;
+    font-size: 29px;
+    font-weight: bold;
+     display: block;
+}
+.left-meetings-bev strong{
+    font-size: 18px;
+    color: #9c9fa1;
+    text-align: right;
+}
+.left-header-bev small, .left-meetings-bev small{
+    text-align: right;
+    display: block;
+    font-size: 18px;
+    color: #35A6E0;
+    font-weight: bold;
+}
+.left-meetings-bev small{
+    font-size: 18px;
+    color: #c7c7c7;
+}
+.right-header-bev, .right-meetings-bev{
+    float: left;
+    max-width: 860px;
+    width: 100%;
+}
+.right-header-bev strong, .right-meetings-bev strong{
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+.right-meetings-bev strong{
+    font-weight: normal;
+}
+.right-header-bev small, .right-meetings-bev small{
+   display: block;
+   color: #929292;
+   margin-bottom: 7px;
+   font-size: 14px;
+}
+.right-header-bev p, .right-meetings-bev p{
+   display: block;
+   color: #3F3F3F;
+   margin-bottom: 7px;
+   font-size: 14px;
+}
+.photos {
+    margin:10px 0;
+}
+.carousel-holder{
+    position:relative;
+    height: auto;
+}
+.list-meetings{
+    overflow: hidden;
+}
+.title-meetings-header{
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+}
+.list-meetings ul li{
+    padding: 10px 10px;
+    background-color: #F5F5F5;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.list-meetings ul li:hover{
+    /*$background-color: #ccc;*/
+}
+.list-meetings ul li:hover{
+    padding: 10px 10px;
+    /*background-color: #e5e5e5;*/
+    overflow: hidden;
+    margin-bottom: 10px;
+    /*cursor: pointer;*/
+}
+.wrapper-footer-bev{
+    overflow: hidden;
+    padding: 25px 30px;
+    border-top: 1px solid #e5e5e5;
+}
+.wrapper-footer-bev ul {
+    margin-top: 30px;
+    width: 230px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    overflow: hidden;
+}
+.wrapper-footer-bev ul li{
+    float: left;
+    margin: 0 10px;
+}
+.wrapper-footer-bev ul li a{
+    color: #99A5B2;
+    font-size: 11px;
+}
+.logo-footer-bev{
+    float: left;
+    background: url("../img/logo-hub.png") no-repeat;
+    height: 71px;
+    width: 152px;
+}
+.logo-labs-footer{
+    float: right;
+    background: url("../img/logo-labs.jpg") no-repeat;
+    height: 45px;
+    width: 136px;
+}
+
+ul.image-list li {
+  width: 98px;
+  height: 98px;
+  padding: 4px;
+  background: #fff;
+  float: left;
+  margin-right:4px;
+}
+
+h2.team-name {
+    font-size:17px;
+    font-weight: bold;
+}
+
+div.people {
+    min-height:200px;
+}
+
+div.people-image {
+    margin-top:20px;
+}
+
+div.people-image .image-placeholder {
+    background-color: #f3f3f3;
+    display: block;
+    width:90px;
+    height:90px;
+}
+
+div.project {
+    min-height:200px;
+}
+
+div.project-image {
+    margin-top:20px;
+}
+
+div.project-image .image-placeholder {
+    background-color: #f3f3f3;
+    display: block;
+    width:90px;
+    height:90px;
+}
+
+.label.hub-label-light-gray {
+    background-color: #d0d0d0;
+    padding:0.5em;
+}
+
+
+
+div.team {
+    min-height:200px;
+}
+
+
+div.row.pr-faq-question {
+    margin-bottom:15px;
+}
+p.question {
+
+    font-size:1.1em;
+}
+
+div.answer {
+    padding-left:20px;
+        color:#777;
+}
+
+.pr-faq-question-author {
+    font-size:0.8em;
+}
+
+
+.faq-box {
+    background-color: #f3f3f3;
+    padding:10px 30px 30px 30px;
+}
+
+
+.hub-light-gray {
+    color: #999;
+    padding:0.5em;
+    font-size: 0.8em;
+}
+
+
+#id_email_recipients {
+    height:70px;
+}
+
+
+.table-bordered > tbody > tr > td{
+    vertical-align: middle;
+}
+
+.send-mail[rel],
+.send-slack[rel] {
+    cursor: pointer;
+}
+
+form#send-slack {
+    display: inline;
+}
+
+.changelog-box .edit {
+    text-decoration: none;
+    color: #999;
+    margin-left: 15px;
+    font-size: 27px;
+}
+
+.changelog-box .edit:hover {
+    color: #666;
+}
+
+.project-name:not(.application) {
+    margin: 5px 0 0 0;
+}
+
+.project-name.application {
+    margin: 0;
+}
+
+.project-breadcrumb .hub-light-gray {
+    padding: 0;
+}

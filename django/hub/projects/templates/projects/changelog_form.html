@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load bootstrap staticfiles %}
+
+{% block tab_name %}projects{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "js/view/changelog.js" %}"></script>
+    <script src="{% static "js/markdown.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            <span><a href="{% url 'projects:project_detail' project.pk %}">{{ project.name }}</a></span> <span class="hub-light-gray"><i class="glyphicon glyphicon-menu-right"></i></span>
+            <h2 class="project-name">{% if object.pk %}Editar{% else %}Adicionar{% endif %} changelog: {{ changelog.project.name }}</h2>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                <div class="pull-right">
+                    <button type="button" class="btn btn-info" id="btn-preview" data-toggle="modal" data-target="#markdownPreview"><span class="glyphicon glyphicon-eye-open"></span> Preview</button>
+                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> {% if object.pk %}Salvar{% else %}Adicionar{% endif %}</button>
+                </div>
+            </form>
+            {% if object and not object.email_sent %}
+            <div class="pull-left">
+                <form action="{% url 'projects:changelog_delete' object.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Apagar</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <div id="markdownPreview" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Preview Changelog</h4>
+                    </div>
+                    <div id="preview" class="modal-body"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

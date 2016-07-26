@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block tab_name %}tags{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Tag selecionada: {{ tag }}</h2>
+        </div>
+    </div>
+    <hr>
+
+    {% if accounts %}
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Pessoas relacionadas...</h3>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row" align="center">
+        {% for account in accounts %}
+            <div class="col-md-2">
+                <div class="people">
+                    <div class="row">
+                        <div class="col-md-6 people-image">
+                        {% if account.image %}
+                            <a href="{% url 'accounts:account_detail' account.email %}">
+                                <img height="90" width="90" src="{{ account.image|thumbnail_url:'person_large' }}" class="img-circle img-responsive">
+                                {{ account.name }}
+                                </img>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'accounts:account_detail' account.email %}">
+                                <img height="90" width="90" src="{{ STATIC_URL }}img/noimage90.png" class="img-circle img-responsive">
+                                {{ account.name }}
+                                </img>
+                            </a>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if projects %}
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Projetos relacionados...</h3>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        {% for project in projects %}
+            <div class="col-md-4">
+                <div class="project">
+                    <div class="row">
+                        <div class="col-md-3 project-image">
+                            {% if project.image %}
+                                <img height="90" width="90" src="{{ project.image|thumbnail_url:'project' }}" class="img-circle img-responsive">
+                            {% else %}
+                                <img height="90" width="90" src="{{ STATIC_URL }}img/noimage90.png" class="img-circle img-responsive">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <h3>
+                                <a href="{% url 'projects:project_detail' project.id %}">{{ project.name }}</a>
+                            </h3>
+                            <p>
+                                <span class="label hub-label-light-gray"><i class="glyphicon glyphicon-user"></i> {{ project.team.name|upper }}</span>
+
+                                <p>{{ project.headline }}</p>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

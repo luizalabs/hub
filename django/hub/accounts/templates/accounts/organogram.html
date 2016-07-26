@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+
+{% block content %}
+
+    <ul>
+        {% recursetree people %}
+            <li>
+
+                {% if node.is_root_node %}
+                    <strong>{{ node.name }} {{ node.level }}</strong>
+                {% else %}
+                    {{ node.name }}
+                {% endif %}
+
+                {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+
+{% endblock content %}
