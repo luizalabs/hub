@@ -18,6 +18,7 @@ SLACK_URL = ('https://hooks.slack.com/services/.../.../...'
 CHANGELOG_API_TOKEN = 'xoxb-...........'
 DEFAULT_FROM_EMAIL = ''
 
+DEFAULT_CHANGELOG_RECIPIENTS = ()
 
 SOCIALACCOUNT_ADAPTER = 'accounts.allauth_adapter.HubAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
