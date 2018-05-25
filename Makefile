@@ -57,7 +57,9 @@ clean:
 	@rm -f .coverage
 	@rm -rf htmlcov/
 	@rm -rf docs/build/
-	@pyclean .
+	@find . -name "*.pyc" | xargs rm -rf
+	@find . -name "*.pyo" | xargs rm -rf
+	@find . -name "__pycache__" -type d | xargs rm -rf
 	@echo "Cleaned."
 
 SHELL = /bin/bash
