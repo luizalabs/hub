@@ -78,3 +78,18 @@ shell:
 
 preview-release:
 	@towncrier --draft
+
+release-patch:
+	@bumpversion patch
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
+
+release-minor:
+	@bumpversion minor
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
+
+release-major:
+	@bumpversion major
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
