@@ -1,0 +1,4 @@
+[tool.towncrier]
+    package = 'hub'
+    package_dir = 'django/'
+    filename = 'CHANGELOG.md'

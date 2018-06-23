@@ -75,3 +75,6 @@ collectstatic:
 
 shell:
 	$(MANAGE) shell --settings=settings.$(env)
+
+preview-release:
+	@towncrier --draft
