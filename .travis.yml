@@ -8,8 +8,9 @@ sudo: false
 cache:
     pip
 
+install:
+  - make requirements
 
 script:
-  - make requirements
   - make test
 
