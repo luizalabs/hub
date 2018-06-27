@@ -57,7 +57,9 @@ clean:
 	@rm -f .coverage
 	@rm -rf htmlcov/
 	@rm -rf docs/build/
-	@pyclean .
+	@find . -name "*.pyc" | xargs rm -rf
+	@find . -name "*.pyo" | xargs rm -rf
+	@find . -name "__pycache__" -type d | xargs rm -rf
 	@echo "Cleaned."
 
 SHELL = /bin/bash
@@ -73,3 +75,21 @@ collectstatic:
 
 shell:
 	$(MANAGE) shell --settings=settings.$(env)
+
+preview-release:
+	@towncrier --draft
+
+release-patch:
+	@bumpversion patch
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
+
+release-minor:
+	@bumpversion minor
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
+
+release-major:
+	@bumpversion major
+	@towncrier --yes
+	@git commit -am 'Update CHANGELOG'
