@@ -264,8 +264,10 @@ CACHES = {
 }
 
 
-EMAIL_BACKEND = config('EMAIL_BACKEND',
-                       'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = config(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.smtp.EmailBackend'
+)
 
 AWS_SES_ACCESS_KEY_ID = config('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = config('AWS_SES_SECRET_ACCESS_KEY')
