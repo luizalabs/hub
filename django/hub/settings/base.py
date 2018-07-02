@@ -1,22 +1,16 @@
 import os
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+from decouple import config, Csv
 
-ADMINS = (
-    ('Renato Pedigoni', 'renato@luizalabs.com'),
-)
+DEBUG = config('DEBUG', False)
+TEMPLATE_DEBUG = DEBUG
 
 BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 
-MANAGERS = ADMINS
-
 
 # to be overriden
-SLACK_URL = ('https://hooks.slack.com/services/.../.../...'
-             'token')
-CHANGELOG_API_TOKEN = 'xoxb-...........'
-DEFAULT_FROM_EMAIL = ''
+CHANGELOG_API_TOKEN = config('CHANGELOG_API_TOKEN')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 DEFAULT_CHANGELOG_RECIPIENTS = ()
 
@@ -39,14 +33,10 @@ LOGIN_REDIRECT_URL = '/'
 RAISE_EXCEPTIONS = True
 
 AUTHENTICATION_BACKENDS = (
-    # 'social.backends.google.GoogleOAuth2',
     'allauth.account.auth_backends.AuthenticationBackend',
-
-    # 'django.contrib.auth.backends.ModelBackend',
 )
 
 AUTH_USER_MODEL = 'accounts.Account'
-# SOCIAL_AUTH_USER_MODEL = 'accounts.Account'
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_user',
@@ -73,17 +63,17 @@ THUMBNAIL_ALIASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default=('*',))
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Sao_Paulo'
+TIME_ZONE = config('TIME_ZONE', 'America/Sao_Paulo')
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = config('LANGUAGE_CODE', 'pt-br')
 
 SITE_ID = 1
 
@@ -127,17 +117,15 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'makeitsecret!'
+SECRET_KEY = config('SECRET_KEY')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -161,8 +149,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'accounts.middleware.LoginRequiredMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -223,18 +209,16 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': (
+                '%(levelname)s %(asctime)s %(module)s '
+                '%(process)d %(thread)d %(message)s'
+            )
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
         'hub_logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -245,11 +229,6 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
         'hub': {
             'handlers': ['hub_logfile'],
             'level': 'DEBUG',
@@ -257,3 +236,39 @@ LOGGING = {
         },
     }
 }
+
+DATABASES = {
+    'default': {
+        'ENGINE': config('DATABSE_ENGINE',
+                         default='django.db.backends.sqlite3'),
+        'NAME': config('DATABASE_NAME', default='temp.db'),
+        'USER': config('DATABASE_USER', default=''),
+        'PASSWORD': config('DATABASE_PASSWORD', default=''),
+        'HOST': config('DATABASE_HOST', default=''),
+        'PORT': config('DATABASE_PORT', default=''),
+    }
+}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': config(
+            'DEFAULT_CACHE_BACKEND',
+            default='django.core.cache.backends.locmem.LocMemCache'
+        ),
+        'LOCATION': config(
+            'DEFAULT_CACHE_LOCATION',
+            default='hub-cache'
+        ),
+    }
+}
+
+
+EMAIL_BACKEND = config('EMAIL_BACKEND',
+                       'django.core.mail.backends.smtp.EmailBackend')
+
+AWS_SES_ACCESS_KEY_ID = config('AWS_SES_ACCESS_KEY_ID')
+AWS_SES_SECRET_ACCESS_KEY = config('AWS_SES_SECRET_ACCESS_KEY')
+AWS_SES_REGION_NAME = config('AWS_SES_REGION_NAME', 'us-east-1')
+AWS_SES_REGION_ENDPOINT = config('AWS_SES_REGION_ENDPOINT',
+                                 default='email.us-east-1.amazonaws.com')
