@@ -2,10 +2,12 @@ import os
 
 from decouple import config, Csv
 
-DEBUG = config('DEBUG', False)
+DEBUG = config('DEBUG', False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
-BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+BASE_PATH = os.path.join(
+    os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+)
 
 
 # to be overriden
@@ -101,7 +103,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_PATH, 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_PATH), 'static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -109,7 +111,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(BASE_PATH, '..', 'static'),
+    os.path.join(BASE_PATH, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -157,7 +159,7 @@ ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_PATH, 'templates'),
+    os.path.join(BASE_PATH, 'hub', 'templates'),
 )
 
 INSTALLED_APPS = (
