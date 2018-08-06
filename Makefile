@@ -71,7 +71,7 @@ install-dev: requirements syncdb conf-auth test
 	@echo -e "\033[0m"
 
 collectstatic:
-	@mkdir =p static
+	@mkdir -p static
 	$(MANAGE) collectstatic --noinput
 
 shell:
