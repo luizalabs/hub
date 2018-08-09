@@ -25,25 +25,25 @@ requirements:
 	pip install -r django/requirements/$(env).txt
 
 runserver:
-	$(MANAGE) runserver --settings=settings.$(env)
+	$(MANAGE) runserver --settings=settings
 
 syncdb:
-	$(MANAGE) syncdb --all --noinput --settings=settings.$(env)
+	$(MANAGE) syncdb --all --noinput --settings=settings
 
 migrate:
-	$(MANAGE) migrate --settings=settings.$(env)
+	$(MANAGE) migrate --settings=settings
 
 conf-auth:
-	$(MANAGE) set_google_oauth $(GOOGLE_ID_DEV) $(GOOGLE_KEY_DEV) --settings=settings.$(env)
+	$(MANAGE) set_google_oauth $(GOOGLE_ID_DEV) $(GOOGLE_KEY_DEV) --settings=settings
 
 test: clean
-	$(PYTEST_CMD) --ds=settings.$(env)
+	$(PYTEST_CMD) --ds=settings
 
 coverage:
-	$(PYTEST_CMD) --cov --ds=settings.$(env)
+	$(PYTEST_CMD) --cov --ds=settings
 
 html:
-	$(PYTEST_CMD) --cov --cov-report=html --ds=settings.$(env)
+	$(PYTEST_CMD) --cov --cov-report=html --ds=settings
 	$(OPEN) htmlcov/index.html
 
 doc:
@@ -71,10 +71,11 @@ install-dev: requirements syncdb conf-auth test
 	@echo -e "\033[0m"
 
 collectstatic:
+	@mkdir -p static
 	$(MANAGE) collectstatic --noinput
 
 shell:
-	$(MANAGE) shell --settings=settings.$(env)
+	$(MANAGE) shell --settings=settings
 
 preview-release:
 	@towncrier --draft

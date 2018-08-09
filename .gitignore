@@ -7,16 +7,17 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
+env/
 lib/
 lib64/
 parts/
 sdist/
+static/*
 var/
 *.egg-info/
 .installed.cfg
@@ -58,3 +59,6 @@ target/
 *.db
 django/hub/media/
 media/
+
+# local settings
+django/hub/settings.ini
